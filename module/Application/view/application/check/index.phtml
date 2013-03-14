@@ -1,0 +1,28 @@
+<div class="hero-unit">
+    <h1><?php echo sprintf($this->translate('Welcome to %sCheck Page%s'), '<span class="zf-green">', '</span>') ?></h1>
+</div>
+
+<div>
+    <div class="container">
+        <h2><?php echo $this->translate('Session Test') ?></h2>
+        <p>Visitor count: <?php echo $this->visits;  ?></p>
+    </div>
+    <div class="container">
+        <h2><?php echo $this->translate('Logging Test') ?></h2>
+        <p>
+        <?php
+        $form = $this->form;
+        $form->prepare();
+
+        echo $this->form()->openTag($form);
+        echo $this->formRow($form->get('logentry'));
+        echo $this->formSubmit($form->get('submit'));
+        echo $this->form()->closeTag();
+        ?>
+        </p>
+   </div>
+   <div class="container">
+       <h2><?php echo $this->translate('Environment Test') ?></h2>
+       <p></p>
+   </div
+</div>

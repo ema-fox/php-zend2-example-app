@@ -20,6 +20,16 @@ return array(
                     ),
                 ),
             ),
+	    'check' => array(
+                'type'    => 'Literal',
+                'options' => array(
+                    'route'    => '/check',
+                    'defaults' => array(
+                        'controller'    => 'Application\Controller\Check',
+                        'action'        => 'index',
+                    ),
+                )
+            ),
             // The following is a route to simplify getting started creating
             // new controllers and actions without needing to create a new
             // module. Simply drop new controllers in, and you can access them
@@ -69,7 +79,8 @@ return array(
     ),
     'controllers' => array(
         'invokables' => array(
-            'Application\Controller\Index' => 'Application\Controller\IndexController'
+	    'Application\Controller\Index' => 'Application\Controller\IndexController',
+	    'Application\Controller\Check' => 'Application\Controller\CheckController',
         ),
     ),
     'view_manager' => array(

@@ -20,6 +20,30 @@ class Module
         $eventManager        = $e->getApplication()->getEventManager();
         $moduleRouteListener = new ModuleRouteListener();
         $moduleRouteListener->attach($eventManager);
+	// Configure session using database
+        $config = $e->getApplication()->getServiceManager()->get('config');
+        $dbAdapter = new \Zend\Db\Adapter\Adapter($config['session_db']);
+        $sessionOptions = new \Zend\Session\SaveHandler\DbTableGatewayOptions();
+        $sessionTableGateway = new \Zend\Db\TableGateway\TableGateway('session', $dbAdapter);
+        $saveHandler = new \Zend\Session\SaveHandler\DbTableGateway($sessionTableGateway, $sessionOptions);
+        $sessionManager = new \Zend\Session\SessionManager(NULL, NULL, $saveHandler);
+        $sessionManager->start();
+	// Configure log exceptions to syslog
+        $serviceManager = $e->getApplication()->getServiceManager();
+        $eventManager->getSharedManager()->attach('Zend\Mvc\Application', array(MvcEvent::EVENT_DISPATCH, MvcEvent::EVENT_DISPATCH_ERROR),
+            function($e) use ($serviceManager) {
+                if ($e->getParam('exception')){
+                    $serviceManager->get('Zend\Log\Logger')->err($e->getParam('exception'));
+                }
+            }
+        );
+        register_shutdown_function(function () use ($serviceManager) {
+            if ($e = error_get_last()) {
+	        $logger = $serviceManager->get('Zend\Log\Logger');
+	        $logger->err($e['message'] . " in " . $e['file'] . ' line ' . $e['line']);
+                $logger->__destruct();
+            }
+        });
     }
 
     public function getConfig()
