@@ -1,6 +1,6 @@
 <?php
 
-$deployment = explode('/', $_ENV['DEP_NAME'])[1]
+$deployment = explode('/', $_ENV['DEP_NAME'])[1];
 
 return array(
     'service_manager' => array(
